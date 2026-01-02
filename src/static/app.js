@@ -483,13 +483,16 @@ document.addEventListener("DOMContentLoaded", () => {
     switch (platform) {
       case "facebook":
         // Facebook share dialog
-        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
         window.open(facebookUrl, "_blank", "width=600,height=400");
         break;
 
       case "twitter":
-        // Twitter/X share intent
-        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+        // Twitter/X share intent - include URL in text to avoid duplication
+        const twitterText = `${shareText} - ${shareUrl}`;
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          twitterText
+        )}`;
         window.open(twitterUrl, "_blank", "width=600,height=400");
         break;
 
@@ -507,8 +510,8 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
 
       case "copy":
-        // Copy link to clipboard
-        const textToCopy = `${activityName} - ${shareUrl}`;
+        // Copy link to clipboard with activity details
+        const textToCopy = `${activityName} - ${details.description}\n${shareUrl}`;
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard
             .writeText(textToCopy)
