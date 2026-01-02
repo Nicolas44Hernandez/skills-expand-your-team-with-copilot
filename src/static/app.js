@@ -5,12 +5,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Check for saved dark mode preference
   function initializeDarkMode() {
-    const isDarkMode = localStorage.getItem("darkMode") === "true";
-    if (isDarkMode) {
-      document.body.classList.add("dark-mode");
-      darkModeIcon.textContent = "☀️";
-    } else {
-      document.body.classList.remove("dark-mode");
+    try {
+      const isDarkMode = localStorage.getItem("darkMode") === "true";
+      if (isDarkMode) {
+        document.body.classList.add("dark-mode");
+        darkModeIcon.textContent = "☀️";
+      } else {
+        document.body.classList.remove("dark-mode");
+        darkModeIcon.textContent = "🌙";
+      }
+    } catch (error) {
+      console.error("Error accessing localStorage:", error);
+      // Default to light mode if localStorage is unavailable
       darkModeIcon.textContent = "🌙";
     }
   }
@@ -18,7 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Toggle dark mode
   function toggleDarkMode() {
     const isDarkMode = document.body.classList.toggle("dark-mode");
-    localStorage.setItem("darkMode", isDarkMode);
+    try {
+      localStorage.setItem("darkMode", isDarkMode);
+    } catch (error) {
+      console.error("Error saving dark mode preference:", error);
+    }
     darkModeIcon.textContent = isDarkMode ? "☀️" : "🌙";
   }
 
